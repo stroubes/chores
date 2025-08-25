@@ -2,6 +2,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
+
 from .models import User, Chore, Assignment, Reward, PointLedgerEntry
 from .storage import DB
 
@@ -12,6 +13,33 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def seed_demo_data() -> None:
+    if DB.users:
+        return
+    # Parent user
+    DB.add_user(User(id=100, name="Parent", role="parent"))
+    kids = [
+        User(id=1, name="Alice", role="child"),
+        User(id=2, name="Bob", role="child"),
+        User(id=3, name="Charlie", role="child"),
+    ]
+    for kid in kids:
+        DB.add_user(kid)
+    chores = [
+        Chore(id=1, title="Make Bed", points=5),
+        Chore(id=2, title="Do Dishes", points=10),
+        Chore(id=3, title="Take Out Trash", points=7),
+        Chore(id=4, title="Water Plants", points=4),
+        Chore(id=5, title="Feed Pet", points=6),
+    ]
+    for chore in chores:
+        DB.add_chore(chore)
+    for kid in kids:
+        for chore in chores:
+            DB.add_assignment(Assignment(childId=kid.id, choreId=chore.id))
 
 
 @app.post("/chores")
@@ -71,6 +99,17 @@ async def redeem_reward(child_id: int, reward_id: int) -> dict:
 @app.get("/chores")
 async def list_chores() -> List[Chore]:
     return list(DB.chores.values())
+
+
+@app.post("/kids")
+async def create_kid(user: User) -> User:
+    DB.add_user(user)
+    return user
+
+
+@app.get("/kids")
+async def list_kids() -> List[User]:
+    return [u for u in DB.users.values() if u.role == "child"]
 
 
 @app.get("/kids/{child_id}/assignments")
