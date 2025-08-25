@@ -1,13 +1,35 @@
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #fefcea, #f1da36);
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
 .app {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: sans-serif;
+  width: 100%;
 }
+
 .board {
   width: 100%;
   max-width: 400px;
 }
+
+.child-selector {
+  margin-bottom: 1rem;
+}
+
+.child-selector button {
+  margin: 0 0.25rem;
+  padding: 0.5rem 1rem;
+}
+
+.child-selector button.active {
+  background: #ffcc00;
+}
+
 .chore {
   display: flex;
   justify-content: space-between;
@@ -17,11 +39,35 @@
   background: #f0f0f0;
   border-radius: 8px;
 }
+
 .chore button {
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
 }
+
 .points {
   font-size: 1.2rem;
   margin-bottom: 1rem;
+}
+
+.parent .forms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.parent .forms div {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.kid-block {
+  background: #fff;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
