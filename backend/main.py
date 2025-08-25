@@ -1,10 +1,17 @@
 from __future__ import annotations
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from .models import User, Chore, Assignment, Reward, PointLedgerEntry
 from .storage import DB
 
 app = FastAPI(title="Chore Management System")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/chores")
@@ -59,3 +66,13 @@ async def redeem_reward(child_id: int, reward_id: int) -> dict:
         DB.add_ledger_entry(PointLedgerEntry(userId=child_id, delta=-reward.cost, reason=f"Redeemed {reward.name}"))
         return {"status": "approved"}
     return {"status": "insufficient_points"}
+
+
+@app.get("/chores")
+async def list_chores() -> List[Chore]:
+    return list(DB.chores.values())
+
+
+@app.get("/kids/{child_id}/assignments")
+async def get_assignments(child_id: int) -> List[Assignment]:
+    return [a for a in DB.assignments if a.childId == child_id]

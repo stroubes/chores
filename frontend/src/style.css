@@ -1,0 +1,27 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: sans-serif;
+}
+.board {
+  width: 100%;
+  max-width: 400px;
+}
+.chore {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+.chore button {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+}
+.points {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
